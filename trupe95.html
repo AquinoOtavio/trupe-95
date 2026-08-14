@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trupe 95 — Escola de Artes e Produções Teatrais</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Caveat:wght@600;700&family=Poppins:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --velvet:#23102E;
+    --velvet-2:#341B42;
+    --velvet-3:#40204F;
+    --magenta:#E13F91;
+    --gold:#F4B740;
+    --ember:#F2733D;
+    --cream:#FBF2E4;
+    --line: rgba(251,242,228,.16);
+    --maxw: 1180px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--velvet);
+    color:var(--cream);
+    font-family:'Poppins', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  img,svg{display:block; max-width:100%;}
+  a{color:inherit;}
+  h1,h2,h3{
+    font-family:'Anton', sans-serif;
+    font-weight:400;
+    text-transform:uppercase;
+    margin:0;
+    letter-spacing:.01em;
+  }
+  .script{font-family:'Caveat', cursive; font-weight:700;}
+  .mono{font-family:'Space Mono', monospace; letter-spacing:.04em;}
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 clamp(1.25rem, 4vw, 2.5rem);}
+  section{position:relative;}
+
+  .reveal{opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .7s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+  @media (prefers-reduced-motion: reduce){
+    .reveal{opacity:1; transform:none; transition:none;}
+    html{scroll-behavior:auto;}
+  }
+
+  .eyebrow{
+    font-family:'Space Mono', monospace;
+    font-size:.72rem; letter-spacing:.16em; text-transform:uppercase;
+    display:flex; align-items:center; gap:.6em;
+    color:var(--gold); margin-bottom:1.1rem;
+  }
+  .eyebrow::before{content:"★"; font-size:.85em;}
+
+  /* ---------- marquee border ---------- */
+  .marquee{
+    display:flex; overflow:hidden;
+    background:var(--velvet-2);
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    padding:.6rem 0;
+  }
+  .marquee-track{
+    display:flex; gap:2.5rem; white-space:nowrap;
+    animation:scroll-left 22s linear infinite;
+    flex:none;
+  }
+  .marquee-track span{
+    font-family:'Space Mono', monospace; font-size:.78rem;
+    letter-spacing:.12em; text-transform:uppercase; color:var(--gold);
+    display:flex; align-items:center; gap:.6rem;
+  }
+  .marquee-track span::before{content:"✦"; color:var(--magenta);}
+  @keyframes scroll-left{
+    0%{transform:translateX(0);}
+    100%{transform:translateX(-50%);}
+  }
+  @media (prefers-reduced-motion: reduce){ .marquee-track{animation:none;} }
+
+  /* ---------- nav ---------- */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:150;
+    background:rgba(35,16,46,.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav.wrap{display:flex; align-items:center; justify-content:space-between; height:68px;}
+  .logo{
+    font-family:'Anton', sans-serif; font-size:1.35rem; letter-spacing:.02em;
+    display:flex; align-items:baseline; gap:.3rem;
+  }
+  .logo .script{font-family:'Caveat', cursive; font-size:1.05rem; color:var(--gold); font-weight:600;}
+  .navlinks{display:flex; align-items:center; gap:2.1rem; font-size:.92rem; font-weight:500;}
+  .navlinks a{text-decoration:none; opacity:.85; transition:opacity .2s;}
+  .navlinks a:hover{opacity:1; color:var(--gold);}
+  .btn{
+    font-family:'Space Mono', monospace; font-size:.76rem; letter-spacing:.06em; text-transform:uppercase;
+    text-decoration:none; display:inline-flex; align-items:center; gap:.5em;
+    padding:.85em 1.5em; border-radius:999px; border:1px solid transparent; cursor:pointer;
+    transition:transform .2s ease, background .2s ease, color .2s ease, border-color .2s ease;
+  }
+  .btn:focus-visible, a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible{
+    outline:2px solid var(--gold); outline-offset:2px;
+  }
+  .btn-gold{background:linear-gradient(120deg, var(--gold), var(--ember)); color:var(--velvet); font-weight:700;}
+  .btn-gold:hover{transform:translateY(-2px);}
+  .btn-outline{border-color:var(--line); color:var(--cream);}
+  .btn-outline:hover{border-color:var(--gold); color:var(--gold);}
+  .btn-outline-dark{border-color:rgba(35,16,46,.25); color:var(--velvet);}
+  .btn-outline-dark:hover{border-color:var(--magenta); color:var(--magenta);}
+
+  .navburger{display:none; background:none; border:0; color:var(--cream); font-size:1.5rem; cursor:pointer;}
+
+  /* ---------- hero ---------- */
+  #hero{
+    padding:calc(68px + 3rem) 0 0;
+    background:
+      radial-gradient(circle at 50% 34%, rgba(225,63,145,.35), transparent 55%),
+      radial-gradient(ellipse 80% 50% at 50% 0%, rgba(244,183,64,.14), transparent 60%),
+      var(--velvet);
+  }
+  .hero-inner{
+    text-align:center; padding:3.5rem 0 4rem;
+    display:flex; flex-direction:column; align-items:center;
+  }
+  .hero-inner .script{font-size:clamp(1.4rem, 2.6vw, 1.9rem); color:var(--gold);}
+  .hero-inner h1{
+    font-size:clamp(2.8rem, 8vw, 6rem);
+    line-height:.98;
+    margin:.5rem 0 1.6rem;
+    background:linear-gradient(120deg, var(--cream) 30%, var(--gold) 60%, var(--magenta) 90%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero-inner p.lede{
+    font-size:1.08rem; line-height:1.65; color:rgba(251,242,228,.82);
+    max-width:46ch; margin:0 0 2.3rem;
+  }
+  .hero-ctas{display:flex; gap:1rem; flex-wrap:wrap; justify-content:center;}
+
+  /* ---------- quem somos ---------- */
+  #quem{background:var(--velvet); padding:6.5rem 0;}
+  .quem-grid{display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:start;}
+  #quem h2{font-size:clamp(2rem, 3.8vw, 2.9rem); line-height:1.05; margin-bottom:1.4rem;}
+  #quem p{font-size:1.02rem; line-height:1.7; color:rgba(251,242,228,.78); max-width:52ch;}
+  #quem p + p{margin-top:1rem;}
+
+  .cast{display:flex; flex-direction:column; gap:1.2rem;}
+  .cast-card{
+    display:flex; gap:1rem; align-items:center;
+    background:var(--velvet-2); border:1px solid var(--line); border-radius:12px;
+    padding:1.2rem 1.3rem;
+  }
+  .cast-avatar{
+    width:56px; height:56px; border-radius:50%; flex:none;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Anton', sans-serif; font-size:1.1rem; color:var(--velvet);
+  }
+  .cast-info h4{font-family:'Poppins', sans-serif; font-weight:700; font-size:1rem; text-transform:none; margin-bottom:.15rem;}
+  .cast-info p{font-family:'Space Mono', monospace; font-size:.74rem; opacity:.65; margin:0; letter-spacing:.03em;}
+
+  .stats-row{display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-top:1.6rem;}
+  .stat{
+    background:var(--velvet-2); border:1px solid var(--line); border-radius:12px;
+    padding:1.2rem 1rem; text-align:center;
+  }
+  .stat-value{font-family:'Anton', sans-serif; font-size:1.8rem; color:var(--gold);}
+  .stat-label{font-family:'Space Mono', monospace; font-size:.65rem; letter-spacing:.06em; text-transform:uppercase; opacity:.65; margin-top:.3rem;}
+
+  /* ---------- cursos (ticket cards) ---------- */
+  #cursos{background:var(--velvet-2); padding:6.5rem 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .section-head{display:flex; justify-content:space-between; align-items:flex-end; gap:2rem; margin-bottom:3rem; flex-wrap:wrap;}
+  .section-head h2{font-size:clamp(2rem, 3.8vw, 2.9rem); max-width:18ch;}
+  .section-head p{max-width:36ch; color:rgba(251,242,228,.68); line-height:1.6; margin:0; font-size:.98rem;}
+
+  .cursos-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:1.6rem;}
+  .ticket{
+    background:var(--cream); color:var(--velvet);
+    border-radius:14px; position:relative; overflow:visible;
+    display:flex; flex-direction:column;
+    box-shadow:0 18px 34px rgba(0,0,0,.28);
+  }
+  .ticket-top{
+    padding:1.7rem 1.6rem 1.2rem;
+    display:flex; flex-direction:column; gap:.5rem;
+  }
+  .ticket-tag{
+    font-family:'Space Mono', monospace; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--magenta); font-weight:700;
+  }
+  .ticket h3{font-size:1.55rem; line-height:1.1; color:var(--velvet);}
+  .ticket-perf{
+    position:relative; height:0; border-top:2px dashed rgba(35,16,46,.25);
+    margin:0 1.2rem;
+  }
+  .ticket-perf::before, .ticket-perf::after{
+    content:""; position:absolute; top:-11px; width:22px; height:22px;
+    background:var(--velvet-2); border-radius:50%;
+  }
+  .ticket-perf::before{left:-1.2rem;}
+  .ticket-perf::after{right:-1.2rem;}
+  .ticket-bottom{padding:1.2rem 1.6rem 1.7rem; display:flex; flex-direction:column; flex:1;}
+  .ticket-meta{display:flex; gap:1.1rem; margin-bottom:.9rem; font-family:'Space Mono', monospace; font-size:.72rem; opacity:.68;}
+  .ticket-bottom p{font-size:.9rem; line-height:1.6; color:rgba(35,16,46,.75); margin:0 0 1.3rem; flex:1;}
+  .ticket .btn{align-self:flex-start;}
+  .ticket .btn-outline-dark:hover{background:var(--velvet); color:var(--cream);}
+
+  /* ---------- realizações ---------- */
+  #realizacoes{background:var(--velvet); padding:6.5rem 0 5.5rem;}
+  .playbill-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:1.4rem;}
+  .playbill{
+    border-radius:12px; overflow:hidden; border:1px solid var(--line);
+    background:var(--velvet-2);
+    display:flex; flex-direction:column;
+    transition:transform .25s ease, border-color .25s ease;
+  }
+  .playbill:hover{transform:translateY(-4px); border-color:var(--gold);}
+  .playbill-art{
+    height:150px; position:relative;
+    display:flex; align-items:flex-end; padding:1rem 1.1rem;
+  }
+  .playbill-art::after{content:""; position:absolute; inset:0; background:linear-gradient(180deg, transparent 45%, rgba(35,16,46,.6));}
+  .playbill-art span{position:relative; z-index:1; font-family:'Anton', sans-serif; font-size:1.6rem; color:var(--cream); letter-spacing:.02em;}
+  .playbill-info{padding:1.1rem 1.2rem 1.3rem;}
+  .playbill-info h4{font-family:'Poppins', sans-serif; font-weight:700; text-transform:none; font-size:1rem; margin-bottom:.3rem;}
+  .playbill-info p{margin:0; font-family:'Space Mono', monospace; font-size:.7rem; opacity:.62; letter-spacing:.03em;}
+
+  .quotes{display:grid; grid-template-columns:1fr 1fr; gap:2rem; margin-top:3.5rem;}
+  .quote{border-left:2px solid var(--gold); padding-left:1.3rem;}
+  .quote p{font-size:1.02rem; line-height:1.6; font-style:italic; margin:0 0 .7rem; font-family:'Anton', sans-serif; text-transform:none; letter-spacing:0; font-weight:400;}
+  .quote span{font-family:'Space Mono', monospace; font-size:.7rem; opacity:.6; text-transform:uppercase; letter-spacing:.06em;}
+
+  /* ---------- inscrição ---------- */
+  #inscricao{background:linear-gradient(160deg, var(--velvet-3), var(--velvet)); padding:6.5rem 0;}
+  .insc-grid{display:grid; grid-template-columns:.9fr 1.1fr; gap:4rem;}
+  #inscricao h2{font-size:clamp(2.1rem, 4vw, 3.2rem); line-height:1.02; margin-bottom:1.2rem;}
+  #inscricao .insc-copy p{font-size:1.02rem; line-height:1.65; color:rgba(251,242,228,.78); max-width:38ch; margin:0 0 1.6rem;}
+  .insc-points{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.9rem;}
+  .insc-points li{display:flex; gap:.7rem; align-items:flex-start; font-size:.94rem; color:rgba(251,242,228,.82);}
+  .insc-points li::before{content:"★"; color:var(--gold); font-size:.8rem; margin-top:.1em; flex:none;}
+
+  form{background:var(--cream); color:var(--velvet); border-radius:16px; padding:2.4rem 2.2rem;}
+  .form-row{display:grid; grid-template-columns:1fr 1fr; gap:1.1rem;}
+  .field{margin-bottom:1.1rem; display:flex; flex-direction:column; gap:.45rem;}
+  .field label{font-family:'Space Mono', monospace; font-size:.68rem; letter-spacing:.06em; text-transform:uppercase; opacity:.6;}
+  .field input, .field select, .field textarea{
+    background:#fff; border:1px solid rgba(35,16,46,.18); border-radius:8px;
+    color:var(--velvet); font-family:'Poppins', sans-serif; font-size:.95rem;
+    padding:.75em .85em; width:100%;
+  }
+  .field textarea{resize:vertical; min-height:90px;}
+  .field input:focus, .field select:focus, .field textarea:focus{border-color:var(--magenta); outline:none;}
+  form .btn{width:100%; justify-content:center; padding:1em; font-size:.82rem; margin-top:.3rem;}
+  .form-note{font-size:.74rem; opacity:.55; margin-top:.9rem; text-align:center; font-family:'Space Mono', monospace;}
+  #form-success{display:none; text-align:center; padding:2rem 0;}
+  #form-success.show{display:block;}
+  #form-success h3{font-size:1.5rem; margin-bottom:.5rem; text-transform:none; font-family:'Anton', sans-serif;}
+  #form-success p{font-size:.92rem; opacity:.68; margin:0;}
+
+  /* ---------- footer ---------- */
+  footer{background:var(--velvet); border-top:1px solid var(--line); padding:3rem 0 2.2rem;}
+  .foot-grid{display:flex; justify-content:space-between; align-items:flex-start; gap:2rem; flex-wrap:wrap;}
+  .foot-brand p{font-size:.86rem; opacity:.62; max-width:34ch; line-height:1.6; margin:.8rem 0 0;}
+  .foot-cols{display:flex; gap:3.5rem; flex-wrap:wrap;}
+  .foot-col h5{font-family:'Space Mono', monospace; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; opacity:.5; margin:0 0 .9rem; font-weight:400;}
+  .foot-col a, .foot-col p{display:block; font-size:.88rem; text-decoration:none; opacity:.8; margin-bottom:.55rem; line-height:1.4;}
+  .foot-bottom{margin-top:2.8rem; padding-top:1.6rem; border-top:1px solid var(--line); font-family:'Space Mono', monospace; font-size:.72rem; opacity:.45; display:flex; justify-content:space-between; flex-wrap:wrap; gap:.6rem;}
+
+  /* ---------- responsive ---------- */
+  @media (max-width:980px){
+    .quem-grid, .insc-grid{grid-template-columns:1fr;}
+    .cursos-grid, .playbill-grid{grid-template-columns:1fr 1fr;}
+    .quotes{grid-template-columns:1fr;}
+  }
+  @media (max-width:720px){
+    .navlinks{
+      position:fixed; top:68px; left:0; right:0; bottom:0;
+      background:var(--velvet); flex-direction:column; align-items:flex-start;
+      padding:2rem clamp(1.25rem, 4vw, 2.5rem); gap:1.6rem;
+      transform:translateX(100%); transition:transform .3s ease; font-size:1.1rem;
+    }
+    .navlinks.open{transform:translateX(0);}
+    .navburger{display:block;}
+    .cursos-grid, .playbill-grid{grid-template-columns:1fr;}
+    .stats-row{grid-template-columns:1fr;}
+    .form-row{grid-template-columns:1fr;}
+    .foot-grid{flex-direction:column;}
+    .foot-cols{gap:2.2rem;}
+    .ticket-perf::before{left:-1rem;} .ticket-perf::after{right:-1rem;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <div class="logo">TRUPE<span class="script">95</span></div>
+    <div class="navlinks" id="navlinks">
+      <a href="#quem">Quem somos</a>
+      <a href="#cursos">Cursos de férias</a>
+      <a href="#realizacoes">Já rolou</a>
+      <a href="#inscricao" class="btn btn-gold">Inscreva-se</a>
+    </div>
+    <button class="navburger" id="navburger" aria-label="Abrir menu" aria-expanded="false">☰</button>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner wrap">
+    <span class="script">Escola de artes e produções teatrais</span>
+    <h1>Faça barulho,<br>vire história.</h1>
+    <p class="lede">A Trupe 95 forma atores, cantores e bailarinos para o teatro musical — com cursos livres, intensivos e montagens inspiradas nos maiores sucessos da Broadway. Núcleos em São Paulo e Mogi das Cruzes.</p>
+    <div class="hero-ctas">
+      <a href="#inscricao" class="btn btn-gold">Quero me inscrever</a>
+      <a href="#realizacoes" class="btn btn-outline">Ver o que já rolou</a>
+    </div>
+  </div>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>Cursos de Férias</span><span>Teatro Musical</span><span>Canto</span><span>Dança</span><span>Interpretação</span><span>Faça Barulho, Vire História</span>
+      <span>Cursos de Férias</span><span>Teatro Musical</span><span>Canto</span><span>Dança</span><span>Interpretação</span><span>Faça Barulho, Vire História</span>
+    </div>
+  </div>
+</section>
+
+<!-- QUEM SOMOS -->
+<section id="quem">
+  <div class="wrap quem-grid">
+    <div class="reveal">
+      <div class="eyebrow">Quem somos</div>
+      <h2>Uma trupe de verdade, formando artistas de palco.</h2>
+      <p>A Trupe 95 é uma escola de artes e produções teatrais dedicada ao teatro musical, comandada por Rafael Cairo e Kaio Lima. Com núcleos em São Paulo e em Mogi das Cruzes, a escola une aula técnica e produção de espetáculo: aqui, aprender e subir ao palco caminham juntos.</p>
+      <p>Além dos cursos livres e intensivos, a Trupe 95 assina montagens independentes inspiradas em grandes sucessos da Broadway, apresentadas em teatros como o Teatro Gamaro e o Galpão Arthur Netto.</p>
+
+      <div class="stats-row">
+        <div class="stat"><div class="stat-value mono">1</div><div class="stat-label">Ano de história</div></div>
+        <div class="stat"><div class="stat-value mono">2</div><div class="stat-label">Núcleos: SP e Mogi</div></div>
+        <div class="stat"><div class="stat-value mono">1400+</div><div class="stat-label">Seguidores na trupe</div></div>
+      </div>
+    </div>
+
+    <div class="cast reveal">
+      <div class="cast-card">
+        <div class="cast-avatar" style="background:linear-gradient(140deg, var(--gold), var(--ember));">RC</div>
+        <div class="cast-info">
+          <h4>Rafael Cairo</h4>
+          <p>Direção · Rafael Fernandes Pimentel Cairo</p>
+        </div>
+      </div>
+      <div class="cast-card">
+        <div class="cast-avatar" style="background:linear-gradient(140deg, var(--magenta), var(--ember));">KL</div>
+        <div class="cast-info">
+          <h4>Kaio Lima</h4>
+          <p>Direção</p>
+        </div>
+      </div>
+      <div class="cast-card">
+        <div class="cast-avatar" style="background:linear-gradient(140deg, var(--ember), var(--gold));">SP</div>
+        <div class="cast-info">
+          <h4>Núcleo São Paulo</h4>
+          <p>Aulas e montagens</p>
+        </div>
+      </div>
+      <div class="cast-card">
+        <div class="cast-avatar" style="background:linear-gradient(140deg, var(--magenta), var(--gold));">MC</div>
+        <div class="cast-info">
+          <h4>Núcleo Mogi das Cruzes</h4>
+          <p>Aulas e montagens</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CURSOS DE FÉRIAS -->
+<section id="cursos">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>Cursos de férias</h2>
+      <p>Turmas temáticas e intensivas de canto, dança e interpretação — pensadas pra quem quer aproveitar as férias fazendo o que ama.</p>
+    </div>
+    <div class="cursos-grid">
+
+      <div class="ticket reveal">
+        <div class="ticket-top">
+          <span class="ticket-tag mono">Entrada · Temporada</span>
+          <h3>Férias com a Família Addams</h3>
+        </div>
+        <div class="ticket-perf" aria-hidden="true"></div>
+        <div class="ticket-bottom">
+          <div class="ticket-meta mono"><span>Núcleo Mogi</span><span>Turma temática</span></div>
+          <p>Curso de férias inspirado no musical Addams: canto, dança e interpretação em torno de uma das montagens mais queridas da trupe.</p>
+          <a href="#inscricao" class="btn btn-outline-dark">Inscrever nesta turma</a>
+        </div>
+      </div>
+
+      <div class="ticket reveal">
+        <div class="ticket-top">
+          <span class="ticket-tag mono">Entrada · Temporada</span>
+          <h3>Férias Disney</h3>
+        </div>
+        <div class="ticket-perf" aria-hidden="true"></div>
+        <div class="ticket-bottom">
+          <div class="ticket-meta mono"><span>SP & Mogi</span><span>Turma temática</span></div>
+          <p>Uma semana de imersão em clássicos Disney levados ao teatro musical, com aulas práticas de canto, dança e interpretação.</p>
+          <a href="#inscricao" class="btn btn-outline-dark">Inscrever nesta turma</a>
+        </div>
+      </div>
+
+      <div class="ticket reveal">
+        <div class="ticket-top">
+          <span class="ticket-tag mono">Entrada · Curso livre</span>
+          <h3>Imersão Teatro Musical</h3>
+        </div>
+        <div class="ticket-perf" aria-hidden="true"></div>
+        <div class="ticket-bottom">
+          <div class="ticket-meta mono"><span>SP & Mogi</span><span>Canto · Dança · Interpretação</span></div>
+          <p>A base do teatro musical em formato intensivo de férias, com processo criativo que pode virar apresentação de encerramento.</p>
+          <a href="#inscricao" class="btn btn-outline-dark">Inscrever nesta turma</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- REALIZAÇÕES -->
+<section id="realizacoes">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>O que já rolou</h2>
+      <p>Espetáculos, parcerias e momentos que marcaram o primeiro ano de trupe.</p>
+    </div>
+
+    <div class="playbill-grid">
+      <div class="playbill reveal">
+        <div class="playbill-art" style="background:linear-gradient(140deg,#E13F91,#F2733D);"><span>Rock<br>Na Trupe</span></div>
+        <div class="playbill-info"><h4>Rock Na Trupe</h4><p>Espetáculo musical · Teatro Gamaro</p></div>
+      </div>
+      <div class="playbill reveal">
+        <div class="playbill-art" style="background:linear-gradient(140deg,#23102E,#40204F);"><span>Addams</span></div>
+        <div class="playbill-info"><h4>Addams</h4><p>Montagem e curso temático · Mogi das Cruzes</p></div>
+      </div>
+      <div class="playbill reveal">
+        <div class="playbill-art" style="background:linear-gradient(140deg,#F4B740,#E13F91);"><span>In<br>Concert</span></div>
+        <div class="playbill-info"><h4>In Concert</h4><p>Apresentação musical da trupe</p></div>
+      </div>
+      <div class="playbill reveal">
+        <div class="playbill-art" style="background:linear-gradient(140deg,#40204F,#E13F91);"><span>Collab<br>Senac</span></div>
+        <div class="playbill-info"><h4>Collab Senac</h4><p>Parceria institucional</p></div>
+      </div>
+      <div class="playbill reveal">
+        <div class="playbill-art" style="background:linear-gradient(140deg,#F2733D,#F4B740);"><span>Férias<br>Disney</span></div>
+        <div class="playbill-info"><h4>Férias Disney</h4><p>Curso de férias temático</p></div>
+      </div>
+      <div class="playbill reveal">
+        <div class="playbill-art" style="background:linear-gradient(140deg,#E13F91,#40204F);"><span>1 Ano<br>Trupe95</span></div>
+        <div class="playbill-info"><h4>Trupe95 · 1 Ano</h4><p>Faça barulho, vire história</p></div>
+      </div>
+    </div>
+
+    <div class="quotes">
+      <div class="quote reveal">
+        <p>"Chegou tímido no primeiro dia de aula e terminou a temporada cantando solo no palco do Gamaro."</p>
+        <span>Comentário de responsável, turma de canto</span>
+      </div>
+      <div class="quote reveal">
+        <p>"Em uma semana de curso de férias, meu filho decorou coreografia, letra e ainda fez amigos pra vida toda."</p>
+        <span>Comentário de responsável, Férias Disney</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INSCRIÇÃO -->
+<section id="inscricao">
+  <div class="wrap insc-grid">
+    <div class="insc-copy reveal">
+      <div class="eyebrow">Garanta sua vaga</div>
+      <h2>Bora subir ao palco?</h2>
+      <p>As turmas de férias são intensivas e concorridas — canto, dança e interpretação em um só processo, com direito a apresentação para família e amigos.</p>
+      <ul class="insc-points">
+        <li>Aulas práticas com direção que também está nos palcos</li>
+        <li>Processo criativo que pode virar apresentação de encerramento</li>
+        <li>Núcleos em São Paulo e Mogi das Cruzes</li>
+        <li>Turmas por faixa etária, do iniciante ao avançado</li>
+      </ul>
+    </div>
+
+    <div>
+      <form id="insc-form">
+        <div id="form-fields">
+          <div class="form-row">
+            <div class="field">
+              <label for="nome">Nome do aluno(a)</label>
+              <input id="nome" name="nome" type="text" required>
+            </div>
+            <div class="field">
+              <label for="idade">Idade</label>
+              <input id="idade" name="idade" type="number" min="4" max="99" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label for="responsavel">Responsável (se menor de idade)</label>
+              <input id="responsavel" name="responsavel" type="text">
+            </div>
+            <div class="field">
+              <label for="telefone">WhatsApp</label>
+              <input id="telefone" name="telefone" type="tel" required>
+            </div>
+          </div>
+          <div class="field">
+            <label for="email">E-mail</label>
+            <input id="email" name="email" type="email" required>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label for="nucleo">Núcleo</label>
+              <select id="nucleo" name="nucleo" required>
+                <option value="">Selecione</option>
+                <option>São Paulo</option>
+                <option>Mogi das Cruzes</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="curso">Turma de interesse</label>
+              <select id="curso" name="curso" required>
+                <option value="">Selecione</option>
+                <option>Férias com a Família Addams</option>
+                <option>Férias Disney</option>
+                <option>Imersão Teatro Musical</option>
+                <option>Ainda não sei</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="mensagem">Mensagem (opcional)</label>
+            <textarea id="mensagem" name="mensagem" placeholder="Alguma dúvida ou observação?"></textarea>
+          </div>
+          <button type="submit" class="btn btn-gold">Quero me inscrever</button>
+          <p class="form-note">Você recebe a confirmação em até 1 dia útil.</p>
+        </div>
+
+        <div id="form-success">
+          <h3>Inscrição recebida!</h3>
+          <p>A trupe entra em contato em breve pelo WhatsApp ou e-mail pra confirmar sua vaga.</p>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <div class="logo">TRUPE<span class="script">95</span></div>
+        <p>Escola de artes e produções teatrais. Faça barulho, vire história.</p>
+      </div>
+      <div class="foot-cols">
+        <div class="foot-col">
+          <h5>Contato</h5>
+          <a href="https://www.instagram.com/trupe95oficial/" target="_blank" rel="noopener">@trupe95oficial</a>
+          <a href="https://linktr.ee/Trupe95" target="_blank" rel="noopener">linktr.ee/Trupe95</a>
+        </div>
+        <div class="foot-col">
+          <h5>Navegação</h5>
+          <a href="#quem">Quem somos</a>
+          <a href="#cursos">Cursos de férias</a>
+          <a href="#realizacoes">Já rolou</a>
+          <a href="#inscricao">Inscrição</a>
+        </div>
+        <div class="foot-col">
+          <h5>Núcleos</h5>
+          <p>São Paulo, SP</p>
+          <p>Mogi das Cruzes, SP</p>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Trupe 95</span>
+      <span>Faça barulho, vire história.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const burger = document.getElementById('navburger');
+  const links = document.getElementById('navlinks');
+  burger.addEventListener('click', () => {
+    const open = links.classList.toggle('open');
+    burger.setAttribute('aria-expanded', open);
+    burger.textContent = open ? '✕' : '☰';
+  });
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    links.classList.remove('open');
+    burger.setAttribute('aria-expanded', false);
+    burger.textContent = '☰';
+  }));
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, {threshold:0.14});
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  const form = document.getElementById('insc-form');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    document.getElementById('form-fields').style.display = 'none';
+    document.getElementById('form-success').classList.add('show');
+  });
+</script>
+
+</body>
+</html>
